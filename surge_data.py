@@ -1,10 +1,7 @@
 import geopandas
 import pandas
 import matplotlib.pyplot as plt
-import matplotlib
 import numpy as np
-import rasterio
-#from skimage.measure import block_reduce
 import glob
 import os
 

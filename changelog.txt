@@ -8,7 +8,7 @@ changes to GeodatabaseSTglaciers.xlsx:
         - additional issues still to sort:
             - row 2181, wrong GLIMS and/or RGI5 ID, needs tracking down in literature
 
-    - corrected coordinates/attributes:
+    - corrected coordinates:
         - row 475, 4*9CBF6: swapped lat/lon
         - row 551, Little Kasa 4*9CAL96: used the point for the corresponding feature from ST_November.csv
     	- row 572, Brikkerne Gletscher: outlet of Greenland Ice Sheet (not Svalbard or Alaska). Used point from map.
@@ -23,9 +23,48 @@ changes to GeodatabaseSTglaciers.xlsx:
         - row 959, Kroppbreen small glacier north: use CENLAT/CENLON from RGI50-07.00206 (based on Sund et al., 2009)
         - row 986, Kleivbreen: use CENLAT/CENLON from RGI v5.0 (point was actually on Kroppbreen)
         - row 1026, St Clare 6: corrected RGI5 ID (should be RGI50-01.16070), used point from ST_November
+        - row 1266, Langjiabao: used a point within the new RGI7 outline (RGI6 outline split into multiple glaciers)
+        - row 1276, 14.03.14//47: used centroid of RGI2000-v7.0-G-13-10619
+        - row 1279, 14.03.15//414: used point within RGI2000-v7.0-G-13-10849
+        - row 1298, 14.03.07//117: used centroid of corresponding RGI7 outline
+        - row 1435, 14.03.13//154: used centroid of corresponding RGI7 outline
+        - row 1458, 14.03.13//549 Azyktash: used point from ST_November
+        - row 1467, 14.03.14//748: used point within RGI2000-v7.0-G-13-09798
+        - row 1478, 14.03.14//610b: used point from ST_November
+        - row 1545, 14.03.15//58: used point from ST_November
+        - row 1826, 14.03.07//255c: used point from ST_November
+        - row 1990, 14.03.06//507: used centroid of RGI2000-v7.0-G-13-19386
+        - row 2021, 14.03.12//114: used centroid of RGI2000-v7.0-G-13-06535
+        - row 2049, 14.03.13//879: chose point from RGI2000-v7.0-G-13-07806
+        - row 2057, 14.03.15//532: used point from ST_November
+        - row 2078, 14.03.16//110: used centroid of RGI2000-v7.0-G-13-11422
+        - row 2152, Unknown 17: chose point nearby on the RGI7 outline
+        - row 2181, Unnamed 15: chose point on terminus based on Fig. 2 from Copland et al., 2011
         - row 2188, Los Piquenes: CENLAT/CENLON from RGI5 and RGI6 seems to be in the wrong place; used CENLAT/CENLON
             from RGI2000-v7.0-G-17-25404 (same outline, though the glacier name has changed)
         - row 2201, Horcones Inferior: chose a point closer to the middle of the upper basin of the RGI7 outline
+        - row 2203, Unnamed 31: chose a point inside the closest part of the RGI7 outline
+        - row 2206, 14.03.15//117: used point from ST_November
+        - row 2207, 14.03.15//44: used point from ST_November
+        - row 2210, 14.03.14//259: chose a point inside RGI2000-v7.0-G-13-09416
+        - row 2211, 14.03.14//260: chose a point inside RGI2000-v7.0-G-13-09442
+        - row 2212, 14.03.13//550 Azyktash: used centroid of RGI2000-v7.0-G-13-08488
+        - row 2214, 14.03.12//75: used point from ST_November
+        - row 2216, 14.03.13//502c Sovetskikh ofitserov: chose a point inside RGI2000-v7.0-G-13-09794, to match with
+            14.03.13//502a and 14.03.13//502b
+        - row 2217, 14.03.11//127: used centroid of RGI2000-v7.0-G-13-06438
+        - row 2219, 14.03.09//224 Garmo: chose a point in RGI2000-v7.0-G-13-05692
+        - row 2220, 14.03.09//243: chose a point in RGI2000-v7.0-G-13-05692
+        - row 2223, 14.03.08//812: used point from ST_November
+        - row 2226, 14.03.08//128: used centroid of closest RGI7 outline (RGI2000-v7.0-G-13-16618)
+        - row 2227, 14.03.08//130: used point within closest RGI7 outline (RGI2000-v7.0-G-13-16614)
+        - row 2230, 14.03.08//147: used point from ST_November
+        - row 2231, 14.03.07//243b: used centroid of RGI2000-v7.0-G-13-16581
+        - row 2232, 14.03.08//225: used point from ST_November
+        - row 2233, 14.03.07//225a Synardzhar: used point from ST_November
+        - row 2234, 14.03.07//199c Lenin: used point in closest branch of RGI2000-v7.0-G-13-17737
+        - row 2235, 14.03.07//217b: used point from ST_November
+        - row 2236, 14.03.07//215 Kungyrsu: used point from ST_November
         - row 2238, 4*8ABM9: used point from ST_November
         - row 2239, 4*8ABM7: used point from ST_November
         - row 2240, 4*8AAI127: used point from ST_November

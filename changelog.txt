@@ -1,0 +1,62 @@
+changes to GeodatabaseSTglaciers.xlsx:
+
+    - missing coordinates:
+        - added missing lat/lon for:
+            - row 931, Brandtbreen: RGI5 ID 07.01120 (already included in ST_November, but not GeodatabaseSTglaciers)
+            - row 967, Langleikbreen: RGI5 ID 07.00238 (tributary of Storbreen, coordinates from TopoSvalbard)
+            - row 997, Lunckebreen: RGI5 ID 07.00347 (already included in ST_November, but not GeodatabaseSTglaciers)
+        - additional issues still to sort:
+            - row 2181, wrong GLIMS and/or RGI5 ID, needs tracking down in literature
+
+    - corrected coordinates/attributes:
+        - row 475, 4*9CBF6: swapped lat/lon
+        - row 551, Little Kasa 4*9CAL96: used the point for the corresponding feature from ST_November.csv
+    	- row 572, Brikkerne Gletscher: outlet of Greenland Ice Sheet (not Svalbard or Alaska). Used point from map.
+        - row 573, Moraine Creek: used a point in the closest RGI7 outline (Russell Glacier)
+        - row 696, St Clare 5: moved to RGI50-01.16512 (next to St Clare 6)
+        - row 718, 4*9CBE52: used point from ST_November
+        - row 750, Dobbin Bay: used CENLAT/CENLON from RGI50-03.00251 (Dobbin Bay)
+        - row 802, 1HB11015: used CENLAT/CENLON for RGI60-05.01152 (Name: GL2U1HB11013/GL2U1HB11014/GL2U1HB11015)
+        - row 803, 1HB15012: used CENLAT/CENLON for RGI60-05.01460 (Name: GL2U1HB15012)
+        - row 804, 1HB16020: used CENLAT/CENLON for RGI60-05.01358 (Name: GL2U1HB16020)
+        - row 807, 1HC05007: used CENLAT/CENLON from RGI60-05.01131 (Name: GL2U1HC05007)
+        - row 959, Kroppbreen small glacier north: use CENLAT/CENLON from RGI50-07.00206 (based on Sund et al., 2009)
+        - row 986, Kleivbreen: use CENLAT/CENLON from RGI v5.0 (point was actually on Kroppbreen)
+        - row 1026, St Clare 6: corrected RGI5 ID (should be RGI50-01.16070), used point from ST_November
+        - row 2188, Los Piquenes: CENLAT/CENLON from RGI5 and RGI6 seems to be in the wrong place; used CENLAT/CENLON
+            from RGI2000-v7.0-G-17-25404 (same outline, though the glacier name has changed)
+        - row 2201, Horcones Inferior: chose a point closer to the middle of the upper basin of the RGI7 outline
+        - row 2238, 4*8ABM9: used point from ST_November
+        - row 2239, 4*8ABM7: used point from ST_November
+        - row 2240, 4*8AAI127: used point from ST_November
+        - row 2244, 4*9CAL94: chose a point inside the closest part of the RGI7 outline
+        - row 2245, 4*9CAO2: chose a point inside the closest part of the RGI7 outline
+        - row 2245, 4*9CAS95: chose a point inside the closest part of the RGI7 outline
+        - row 2248, 4*9CAS2: used point from ST_November
+        - row 2249, 4*9CAT9: used CENLAT/CENLON from RGI50-01.17030 (closest glacier to point)
+        - row 2251, 4*9CAU12: used CENLAT/CENLON from RGI50-01.25818
+        - row 2252, 4*9CAU11: used CENLAT/CENLON from RGI50-01.16074
+        - row 2253, Wolverine Creek C: used CENLAT/CENLON from RGI50-01.16328
+        - row 2254, 4*9CAU15: used CENLAT/CENLON from RGI50-01.16328
+        - row 2255, 4*9CAU19: used CENLAT/CENLON from RGI50-01.25816
+        - row 2256, 4*9CAU18: used CENLAT/CENLON from RGI50-01.25816
+        - row 2257, Bow Pass Area: used point from ST_November
+        - row 2263, 1HE01010: used point from ST_November
+        - row 2264, 1HB16017: used point from ST_November
+        - row 2265, 1HE09095: used point from ST_November
+        - row 2269, Kroppbreen small glacier south: use CENLAT/CENLON from RGI50-07.00202 (based on Sund et al., 2009)
+        - row 2275, Unnamed between Hochstetterbreen and Molktebreen: used CENLAT/CENLON from RGI50-07.01507
+            (based on Lefauconnier and Hagen, 1991)
+        - row 2277, Allfarvegen Southern basin: used a point from within Allfarvegen (RGI50-07.01507)
+        - row 2278, Svelgfjellet Upper S: used CentLat/CentLon from ST_November for same glacier
+
+
+    - failed to join:
+        - a number of points in Greenland (part of GrIS, not peripheral glaciers)
+        - row 2202, Ventorillo: glacier no longer exists (RIP). Glacier does appear to exist in 1999/2000 LE07 imagery.
+
+TODO:
+	- write script to convert xlsx to csv
+	- write script to generate spatialite db
+	- add RGI v7 and v6 IDs for each point
+    - use a unique key for each glacier (NOT THE NAME)

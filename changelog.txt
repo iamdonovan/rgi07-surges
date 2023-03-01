@@ -1,14 +1,5 @@
 changes to GeodatabaseSTglaciers.xlsx:
-
-    - missing coordinates:
-        - added missing lat/lon for:
-            - row 931, Brandtbreen: RGI5 ID 07.01120 (already included in ST_November, but not GeodatabaseSTglaciers)
-            - row 967, Langleikbreen: RGI5 ID 07.00238 (tributary of Storbreen, coordinates from TopoSvalbard)
-            - row 997, Lunckebreen: RGI5 ID 07.00347 (already included in ST_November, but not GeodatabaseSTglaciers)
-        - additional issues still to sort:
-            - row 2181, wrong GLIMS and/or RGI5 ID, needs tracking down in literature
-
-    - corrected coordinates:
+    - changed coordinates:
         - row 475, 4*9CBF6: swapped lat/lon
         - row 551, Little Kasa 4*9CAL96: used the point for the corresponding feature from ST_November.csv
     	- row 572, Brikkerne Gletscher: outlet of Greenland Ice Sheet (not Svalbard or Alaska). Used point from map.
@@ -20,8 +11,11 @@ changes to GeodatabaseSTglaciers.xlsx:
         - row 803, 1HB15012: used CENLAT/CENLON for RGI60-05.01460 (Name: GL2U1HB15012)
         - row 804, 1HB16020: used CENLAT/CENLON for RGI60-05.01358 (Name: GL2U1HB16020)
         - row 807, 1HC05007: used CENLAT/CENLON from RGI60-05.01131 (Name: GL2U1HC05007)
+        - row 931, Brandtbreen: RGI5 ID 07.01120 (already included in ST_November, but not GeodatabaseSTglaciers)
         - row 959, Kroppbreen small glacier north: use CENLAT/CENLON from RGI50-07.00206 (based on Sund et al., 2009)
+        - row 967, Langleikbreen: RGI5 ID 07.00238 (tributary of Storbreen, coordinates from TopoSvalbard)
         - row 986, Kleivbreen: use CENLAT/CENLON from RGI v5.0 (point was actually on Kroppbreen)
+        - row 997, Lunckebreen: RGI5 ID 07.00347 (already included in ST_November, but not GeodatabaseSTglaciers)
         - row 1026, St Clare 6: corrected RGI5 ID (should be RGI50-01.16070), used point from ST_November
         - row 1266, Langjiabao: used a point within the new RGI7 outline (RGI6 outline split into multiple glaciers)
         - row 1276, 14.03.14//47: used centroid of RGI2000-v7.0-G-13-10619
@@ -91,8 +85,27 @@ changes to GeodatabaseSTglaciers.xlsx:
 
 
     - failed to join:
-        - a number of points in Greenland (part of GrIS, not peripheral glaciers)
-        - row 2202, Ventorillo: glacier no longer exists (RIP). Glacier does appear to exist in 1999/2000 LE07 imagery.
+        - 01 Alaska:
+            - two glaciers (Unnamed PA1969 109 and Unnamed PA1969 117) from Post (1969) map. I can't tell which
+              glaciers they are meant to be, and both points are very far from the nearest RGI outline.
+        - 05 Greenland Periphery:
+            - 22 outlet glaciers of GrIS (including some from RGI6 that have been removed from RGI7)
+            - one glacier on Disko Island/Qeqertarsuaq: 1HB11009. This is referenced in a book chapter called
+              "Surge-type glaciers on Disko Island, Greenland" by Yde and Knudsen, but I cannot find access to it.
+        - 06 Iceland:
+            - one glacier, Svarfadardalur, which appears to refer to a valley. Point is 3-4 km from nearest glaciers.
+        - 13 Asia Central:
+            - nine outlines from the RGI6:
+                - RGI60-13.12508, 13810, 13899, 14375, 18642, 18736, 20372, 42524, 43252
+            - one point that should be in Canada (4*9CBF29), but I can't figure out what happened to the coordinates.
+            - ten points from the Karakoram: 14.03.16//69, 14.03.15//11, 14.03.15//80, 14.03.12//10, 14.03.09//437,
+                14.03.09//108a, 14.03.08//811, 14.03.08//690, 14.03.08//405, and 14.03.07//239.
+                All of these glaciers are referenced in Osipova et al., (1998). Most appear to be included, or are very
+                close to glaciers that are included, in the other inventories (Goerlich and HMA).
+        - 16 Low Latitudes:
+            - row 2202, Ventorillo: glacier no longer exists (RIP). Glacier does appear to exist in 1999/2000
+                LE07 imagery, though it's hard to say for sure.
+
 
 TODO:
 	- write script to convert xlsx to csv

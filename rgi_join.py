@@ -196,6 +196,9 @@ for ind, row in o1_outlines.iterrows():
         missing_pts = gpd.GeoDataFrame(pd.concat(missing_pts))
         missing_pts.set_crs(epsg=4326, inplace=True)
         missing_pts.to_file(os.path.join('points', region_v7 + '_missing.gpkg'))
+        o1_outlines.loc[ind, 'Missing'] = missing_pts.shape[0]
+    else:
+        o1_outlines.loc[ind, 'Missing'] = 0
 
 # show the final outlines with the surge counts
 print(o1_outlines)

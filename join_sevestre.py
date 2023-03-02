@@ -48,7 +48,7 @@ def load_csv(fn_csv, lon_col, lat_col):
     return gdf.set_crs(epsg=4326)
 
 
-def join_attrs(outlines, points, data_name, out_col):
+def join_attrs(outlines, points, data_name):
     """
     Use a spatial join to join points to outlines, then add the value of the "Surging" column from the points based
     on the
@@ -56,7 +56,6 @@ def join_attrs(outlines, points, data_name, out_col):
     :param GeoDataFrame outlines: The outlines to add an attribute to
     :param GeoDataFrame points: The points to use to add attributes
     :param str data_name: the name of the dataset, for keeping track of where missing glaciers come from.
-    :param str out_col: the name of the column to update in **outlines**
     :returns:
         - outlines
         - missing
@@ -81,7 +80,7 @@ def join_attrs(outlines, points, data_name, out_col):
     # now, get the rows that matched
     is_matched = outlines.index.isin(joined['index_right'])
     # set the RGI v6 surge flag to equal what we get out of the joined table
-    outlines.loc[is_matched, out_col] = outlines.join(joined.set_index('index_right'), lsuffix='_')['Surging']
+    outlines.loc[is_matched, 'SurgeType'] = outlines.join(joined.set_index('index_right'), lsuffix='_')['SurgeType']
 
     return outlines, missing
 
@@ -103,14 +102,6 @@ names_v7 = ['alaska', 'western_canada_usa', 'arctic_canada_north', 'arctic_canad
             'low_latitudes', 'southern_andes', 'new_zealand', 'subantarctic_antarctic_islands']
 # a dict of region numbers and names for RGI v7
 namedict_v7 = dict(zip(regions, names_v7))
-
-# the list of region names used in RGI v7
-names_v6 = ['Alaska', 'WesternCanadaUS', 'ArcticCanadaNorth', 'ArcticCanadaSouth', 'GreenlandPeriphery',
-            'Iceland', 'Svalbard', 'Scandinavia', 'RussianArctic', 'NorthAsia', 'CentralEurope',
-            'CaucasusMiddleEast', 'CentralAsia', 'SouthAsiaWest', 'SouthAsiaEast', 'LowLatitudes',
-            'SouthernAndes', 'NewZealand', 'AntarcticSubantarctic']
-# a dict of region numbers and names for RGI v6
-namedict_v6 = dict(zip(regions, names_v6))
 
 # load the O1 outlines
 o1_outlines = gpd.read_file(os.path.join(rgi_dir, 'v6.0', '00_rgi60_regions/00_rgi60_O1Regions.shp'))
@@ -138,32 +129,14 @@ for ind, row in o1_outlines.iterrows():
     region_v7 = format_v7(rgn, namedict_v7[rgn])
     print(region_v7)
 
-    # format the v6 name of the region
-    region_v6 = format_v6(rgn, namedict_v6[rgn])
-
     # load the v7 outlines
     v7_outlines = gpd.read_file(os.path.join(rgi_dir, 'v7b', region_v7, region_v7 + '.shp'))
-    v7_outlines['rgi6_surgeflag'] = 9 # set to 9 by default
-    v7_outlines['rgi6_surgeflag'] = v7_outlines['rgi6_surgeflag'].astype(int)
-
     # add a column for the ST_Nov, ST_Geo, and flagged
-    v7_outlines['ST_Nov'] = 0
-    v7_outlines['ST_Geo'] = 0
-    v7_outlines['flagged'] = 0
+    v7_outlines['surge_type'] = 9
+    v7_outlines.surge_type = v7_outlines.surge_type.astype(int)
 
     # set the index to the rgi_id
     v7_outlines.set_index('rgi_id', inplace=True)
-
-    # load the v6 outlines
-    v6_outlines = gpd.read_file(os.path.join(rgi_dir, 'v6.0', region_v6, region_v6 + '.shp'))
-
-    # copy the outlines, change the geometry to a representative point
-    v6_points = v6_outlines.copy()
-    v6_points.geometry = v6_points.representative_point()
-
-    # now, subset RGI v6
-    these_points = v6_points.loc[(v6_points.Surging == 1) | (v6_points.Surging == 2) | (v6_points.Surging == 3)]
-    these_points.set_index('RGIId', inplace=True)
 
     # get the points from GeodatabaseSTglaciers.csv that are in this region
     geo_in = outline.contains(geodatabase.geometry)
@@ -172,33 +145,11 @@ for ind, row in o1_outlines.iterrows():
     nov_in = outline.contains(november.geometry)
 
     # set up the loop over the datasets
-    flags = ['rgi6_surgeflag', 'ST_Geo', 'ST_Nov']
-    datanames = ['RGI v6.0', 'GeodatabaseSTglaciers.csv', 'ST_November.csv']
-    datasets = [these_points, geodatabase.loc[geo_in], november.loc[nov_in]]
+    datanames = ['GeodatabaseSTglaciers.csv', 'ST_November.csv']
+    datasets = [geodatabase.loc[geo_in], november.loc[nov_in]]
 
-    for flag, name, points in zip(flags, datanames, datasets):
-        v7_outlines, missing = join_attrs(v7_outlines, points, name, flag)
+    for name, points in zip(datanames, datasets):
+        v7_outlines, missing = join_attrs(v7_outlines, points, name)
         missing_pts.append(missing)
 
-    flagged = np.logical_or.reduce([v7_outlines.rgi6_surgeflag == 1,
-                                    v7_outlines.rgi6_surgeflag == 2,
-                                    v7_outlines.rgi6_surgeflag == 3,
-                                    v7_outlines.ST_Geo == 1,
-                                    v7_outlines.ST_Nov == 1])
-    v7_outlines.loc[flagged, 'flagged'] = 1
-    surge_count = np.count_nonzero(flagged)
-    o1_outlines.loc[ind, 'SurgeCount'] = surge_count
-
     v7_outlines.to_file(os.path.join('outlines', region_v7 + '.gpkg'))
-
-    # if we don't have any missing points, we don't save them.
-    if sum(m is not None for m in missing_pts) > 0:
-        missing_pts = gpd.GeoDataFrame(pd.concat(missing_pts))
-        missing_pts.set_crs(epsg=4326, inplace=True)
-        missing_pts.to_file(os.path.join('points', region_v7 + '_missing.gpkg'))
-        o1_outlines.loc[ind, 'Missing'] = missing_pts.shape[0]
-    else:
-        o1_outlines.loc[ind, 'Missing'] = 0
-
-# show the final outlines with the surge counts
-print(o1_outlines)

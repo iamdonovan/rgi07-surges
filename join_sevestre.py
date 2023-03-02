@@ -80,7 +80,7 @@ def join_attrs(outlines, points, data_name):
     # now, get the rows that matched
     is_matched = outlines.index.isin(joined['index_right'])
     # set the RGI v6 surge flag to equal what we get out of the joined table
-    outlines.loc[is_matched, 'SurgeType'] = outlines.join(joined.set_index('index_right'), lsuffix='_')['SurgeType']
+    outlines.loc[is_matched, 'surge_type'] = outlines.join(joined.set_index('index_right'), lsuffix='_')['SurgeType']
 
     return outlines, missing
 
@@ -151,4 +151,5 @@ for ind, row in o1_outlines.iterrows():
         v7_outlines, missing = join_attrs(v7_outlines, points, name)
         missing_pts.append(missing)
 
-    v7_outlines[['surge_type']].to_csv(os.path.join('attributes', name_v7 + 'sevestre.csv'), index=True)
+    v7_outlines[['surge_type']].to_csv(os.path.join('attributes', name_v7 + '_sevestre.csv'), index=True)
+

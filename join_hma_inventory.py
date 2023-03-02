@@ -81,4 +81,4 @@ for reg in regions:
         # if an RGI outline has more than 5% overlap, include it
         v7_outlines.loc[overlapping.loc[overlaps > 0.05].index, 'surge_type'] = row['SurgeType']
 
-    v7_outlines[['rgi_id', 'surge_type']].to_csv(os.path.join('attributes', name_v7 + 'hma.csv'), index=False)
+    v7_outlines[['rgi_id', 'surge_type']].to_csv(os.path.join('attributes', name_v7 + '_hma.csv'), index=False)

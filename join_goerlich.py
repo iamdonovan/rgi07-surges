@@ -29,4 +29,4 @@ for ind, row in goerlich_outlines.iterrows():
     # if an RGI outline has more than 5% overlap, include it
     rgi_outlines.loc[overlapping.loc[overlaps > 0.05].index, 'surge_type'] = 3
 
-rgi_outlines[['rgi_id', 'surge_type']].to_csv(os.path.join('attributes', region + 'goerlich.csv'), index=False)
+rgi_outlines[['rgi_id', 'surge_type']].to_csv(os.path.join('attributes', region + '_goerlich.csv'), index=False)

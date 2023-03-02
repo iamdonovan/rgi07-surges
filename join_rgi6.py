@@ -28,8 +28,8 @@ def format_v6(rgn, name):
     return '_'.join([rgn, 'rgi60', name])
 
 
-# create two new directories
-os.makedirs('outlines', exist_ok=True)
+# make the output folder if it doesn't exist
+os.makedirs('attributes', exist_ok=True)
 
 # set the directory where the RGI folders are kept
 rgi_dir = '/media/bob/seabox/RGI/'
@@ -92,4 +92,4 @@ for rgn in regions:
         # if an RGI outline has more than 5% overlap, include it
         v7_outlines.loc[overlapping.loc[overlaps > 0.05].index, 'surge_type'] = row['Surging']
 
-    v7_outlines.to_file(os.path.join('outlines', name_v7 + '.gpkg'))
+    v7_outlines[['surge_type']].to_csv(os.path.join('attributes', name_v7 + 'rgi6.csv'), index=True)

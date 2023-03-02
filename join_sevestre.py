@@ -85,9 +85,8 @@ def join_attrs(outlines, points, data_name):
     return outlines, missing
 
 
-# create two new directories
-os.makedirs('outlines', exist_ok=True)
-os.makedirs('points', exist_ok=True)
+# make the output folder if it doesn't exist
+os.makedirs('attributes', exist_ok=True)
 
 # set the directory where the RGI folders are kept
 rgi_dir = '/media/bob/seabox/RGI/'
@@ -126,11 +125,11 @@ for ind, row in o1_outlines.iterrows():
     missing_pts = []
 
     # format the v7 name of the region
-    region_v7 = format_v7(rgn, namedict_v7[rgn])
-    print(region_v7)
+    name_v7 = format_v7(rgn, namedict_v7[rgn])
+    print(name_v7)
 
     # load the v7 outlines
-    v7_outlines = gpd.read_file(os.path.join(rgi_dir, 'v7b', region_v7, region_v7 + '.shp'))
+    v7_outlines = gpd.read_file(os.path.join(rgi_dir, 'v7b', name_v7, name_v7 + '.shp'))
     # add a column for the ST_Nov, ST_Geo, and flagged
     v7_outlines['surge_type'] = 9
     v7_outlines.surge_type = v7_outlines.surge_type.astype(int)
@@ -152,4 +151,4 @@ for ind, row in o1_outlines.iterrows():
         v7_outlines, missing = join_attrs(v7_outlines, points, name)
         missing_pts.append(missing)
 
-    v7_outlines.to_file(os.path.join('outlines', region_v7 + '.gpkg'))
+    v7_outlines[['surge_type']].to_csv(os.path.join('attributes', name_v7 + 'sevestre.csv'), index=True)

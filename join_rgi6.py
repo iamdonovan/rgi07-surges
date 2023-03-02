@@ -64,8 +64,8 @@ for rgn in regions:
 
     # load the v7 outlines
     v7_outlines = gpd.read_file(os.path.join(rgi_dir, 'v7b', name_v7, name_v7 + '.shp'))
-    v7_outlines['SurgeType'] = 9  # set to 9 by default
-    v7_outlines['SurgeType'] = v7_outlines['SurgeType'].astype(int)
+    v7_outlines['surge_type'] = 9  # set to 9 by default
+    v7_outlines['surge_type'] = v7_outlines['surge_type'].astype(int)
 
     # set the index to the rgi_id
     v7_outlines.set_index('rgi_id', inplace=True)
@@ -83,13 +83,13 @@ for rgn in regions:
     # should probably convert to a projected CRS for this...
     for ind, row in surge_outlines.iterrows():
         # get all of the outlines that overlap with this one
-        overlapping = overlap.loc[overlap['RGIId'] == ind]
+        overlapping = overlap.loc[overlap['index_right'] == ind]
 
         # get the fraction of this outline's area that each overlap equals
         overlaps = np.array([row['geometry'].intersection(o['geometry']).area for _, o in overlapping.iterrows()])
         overlaps = overlaps / row['geometry'].area
 
         # if an RGI outline has more than 5% overlap, include it
-        v7_outlines.loc[overlapping.loc[overlaps > 0.05].index, 'surge_type'] = row['SurgeType']
+        v7_outlines.loc[overlapping.loc[overlaps > 0.05].index, 'surge_type'] = row['Surging']
 
     v7_outlines.to_file(os.path.join('outlines', name_v7 + '.gpkg'))

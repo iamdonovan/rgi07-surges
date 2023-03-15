@@ -2,28 +2,7 @@ import os
 import geopandas as gpd
 import pandas as pd
 import numpy as np
-
-
-def format_v7(rgn, name):
-    """
-    Given a region and a name, construct the RGI v7 region name for a file/folder
-
-    :param str rgn: the region number (e.g., '01')
-    :param str name: the region name (e.g., 'alaska')
-    :return:
-    """
-    return '-'.join(['RGI2000', 'v7.0', 'G', '_'.join([rgn, name.lower()])])
-
-
-def format_v6(rgn, name):
-    """
-    Given a region and a name, construct the RGI v7 region name for a file/folder
-
-    :param str rgn: the region number (e.g., '01')
-    :param str name: the region name (e.g., 'Alaska')
-    :return:
-    """
-    return '_'.join([rgn, 'rgi60', name])
+import tools
 
 
 # make the output folder if it doesn't exist
@@ -53,10 +32,10 @@ names_v6 = ['CentralAsia', 'SouthAsiaWest', 'SouthAsiaEast']
 namedict_v6 = dict(zip(regions, names_v6))
 
 for reg in regions:
-    name_v7 = format_v7(reg, namedict_v7[reg])
+    name_v7 = tools.format_v7(reg, namedict_v7[reg])
     print(name_v7)
 
-    name_v6 = format_v6(reg, namedict_v6[reg])
+    name_v6 = tools.format_v6(reg, namedict_v6[reg])
 
     # load the RGI7 and RGI6 outlines
     v7_outlines = gpd.read_file(os.path.join(rgi_dir, 'v7b', name_v7, name_v7 + '.shp'))

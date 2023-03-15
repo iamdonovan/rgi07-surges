@@ -1,31 +1,7 @@
 import os
 import geopandas as gpd
-import pandas as pd
 import numpy as np
-from shapely.geometry import Point
-from glob import glob
-
-
-def format_v7(rgn, name):
-    """
-    Given a region and a name, construct the RGI v7 region name for a file/folder
-
-    :param str rgn: the region number (e.g., '01')
-    :param str name: the region name (e.g., 'alaska')
-    :return:
-    """
-    return '-'.join(['RGI2000', 'v7.0', 'G', '_'.join([rgn, name.lower()])])
-
-
-def format_v6(rgn, name):
-    """
-    Given a region and a name, construct the RGI v7 region name for a file/folder
-
-    :param str rgn: the region number (e.g., '01')
-    :param str name: the region name (e.g., 'Alaska')
-    :return:
-    """
-    return '_'.join([rgn, 'rgi60', name])
+import tools
 
 
 # make the output folder if it doesn't exist
@@ -56,11 +32,11 @@ namedict_v6 = dict(zip(regions, names_v6))
 # now, loop through the different regions
 for rgn in regions:
     # format the v7 name of the region
-    name_v7 = format_v7(rgn, namedict_v7[rgn])
+    name_v7 = tools.format_v7(rgn, namedict_v7[rgn])
     print(name_v7)
 
     # format the v6 name of the region
-    name_v6 = format_v6(rgn, namedict_v6[rgn])
+    name_v6 = tools.format_v6(rgn, namedict_v6[rgn])
 
     # load the v7 outlines
     v7_outlines = gpd.read_file(os.path.join(rgi_dir, 'v7b', name_v7, name_v7 + '.shp'))

@@ -1,9 +1,5 @@
-import os
 import geopandas as gpd
 import pandas as pd
-import numpy as np
-from shapely.geometry import Point
-from glob import glob
 
 
 def format_v7(rgn, name):

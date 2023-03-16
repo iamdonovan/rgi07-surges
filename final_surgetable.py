@@ -18,7 +18,11 @@ for rgn, name in tools.rgi7_namedict().items():
     all_regions.append(joined)
 
 combined_table = pd.concat(all_regions)
+combined_table = combined_table.loc[combined_table['surge_type'].isin([1, 2, 3])]
+
+combined_table['geometry'] = gpd.points_from_xy(combined_table['cenlon'], combined_table['cenlat'], crs='epsg:4326')
+combined_table.to_file(os.path.join('data', 'joined_surges.gpkg'))
+
 del combined_table['geometry']
 
-combined_table = combined_table.loc[combined_table['surge_type'].isin([1, 2, 3])]
 combined_table.to_csv(os.path.join('data', 'final_surgetable.csv'), index=False)

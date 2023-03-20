@@ -41,7 +41,7 @@ def load_csv(fn_csv, lon_col, lat_col):
     return gdf
 
 
-def join_attrs(outlines, points, data_name):
+def join_attrs(outlines, points, data_name, colname='SurgeType'):
     """
     Use a spatial join to join points to outlines, then add the value of the "Surging" column from the points based
     on the
@@ -49,6 +49,7 @@ def join_attrs(outlines, points, data_name):
     :param GeoDataFrame outlines: The outlines to add an attribute to
     :param GeoDataFrame points: The points to use to add attributes
     :param str data_name: the name of the dataset, for keeping track of where missing glaciers come from.
+    :param str colname: the name of the column that contains the surgetype attribute
     :returns:
         - outlines
         - missing
@@ -68,12 +69,17 @@ def join_attrs(outlines, points, data_name):
 
     # first, drop duplicates from "index_right" in joined
     # since we don't care if multiple points end up in the same outline
-    joined.drop_duplicates(subset=['index_right'], inplace=True)
+    unique = joined.drop_duplicates(subset=['index_right'])
+
+    # now, make sure we have the maximal surge_type value for each point
+    for ind, row in unique.iterrows():
+        dups = joined.loc[joined['index_right'] == row['index_right']]
+        unique.loc[ind, 'SurgeType'] = dups[colname].max()
 
     # now, get the rows that matched
-    is_matched = outlines.index.isin(joined['index_right'])
+    is_matched = outlines.index.isin(unique['index_right'])
     # set the RGI v6 surge flag to equal what we get out of the joined table
-    outlines.loc[is_matched, 'surge_type'] = outlines.join(joined.set_index('index_right'), lsuffix='_')['SurgeType']
+    outlines.loc[is_matched, 'surge_type'] = outlines.join(unique.set_index('index_right'), lsuffix='_')['SurgeType']
 
     return outlines, missing
 

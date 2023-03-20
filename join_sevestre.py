@@ -28,11 +28,10 @@ o1_outlines.drop([1, 10], inplace=True)
 
 # load GeodatabaseSTglaciers.csv
 geodatabase = tools.load_csv('data/GeodatabaseSTglaciers.csv', 'CENLON', 'CENLAT')
-geodatabase['Surging'] = 1
 
 # load ST_November.csv
 november = tools.load_csv('data/ST_November.csv', 'CentLON', 'CentLAT')
-november['Surging'] = 1
+november['SurgeType'] = 1
 
 # now, loop through the different regions
 for ind, row in o1_outlines.iterrows():
@@ -62,11 +61,12 @@ for ind, row in o1_outlines.iterrows():
     nov_in = outline.contains(november.geometry)
 
     # set up the loop over the datasets
-    datanames = ['GeodatabaseSTglaciers.csv', 'ST_November.csv']
-    datasets = [geodatabase.loc[geo_in], november.loc[nov_in]]
+    datanames = ['ST_November.csv', 'Harmonised_Surge_Index']
+    datasets = [november.loc[nov_in], geodatabase.loc[geo_in]]
+    colnames = ['SurgeType', 'Harmonised_Surge_Index']
 
-    for name, points in zip(datanames, datasets):
-        v7_outlines, missing = tools.join_attrs(v7_outlines, points, name)
+    for name, points, col in zip(datanames, datasets, colnames):
+        v7_outlines, missing = tools.join_attrs(v7_outlines, points, name, colname=col)
         missing_pts.append(missing)
 
     v7_outlines[['surge_type']].to_csv(os.path.join('attributes', name_v7 + '_sevestre.csv'), index=True)
